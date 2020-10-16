@@ -179,7 +179,7 @@ class DeferredCache(Generic[KT, VT]):
         key: KT,
         value: defer.Deferred,
         callback: Optional[Callable[[], None]] = None,
-    ) -> None:
+    ) -> defer.Deferred:
         """Adds a new entry to the cache (or updates an existing one).
 
         The given `value` *must* be a Deferred.
@@ -267,6 +267,9 @@ class DeferredCache(Generic[KT, VT]):
         # _pending_deferred_cache to the real cache.
         #
         observer.addCallbacks(cb, eb)
+
+        # we return a new Deferred which will be called before any subsequent observers.
+        return observable.observe()
 
     def prefill(self, key: KT, value: VT, callback: Callable[[], None] = None):
         callbacks = [callback] if callback else []

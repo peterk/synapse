@@ -210,7 +210,7 @@ class CacheDescriptor(_CacheDescriptorBase):
                 ret = cache.get(cache_key, callback=invalidate_callback)
             except KeyError:
                 ret = defer.maybeDeferred(preserve_fn(self.orig), obj, *args, **kwargs)
-                cache.set(cache_key, ret, callback=invalidate_callback)
+                ret = cache.set(cache_key, ret, callback=invalidate_callback)
 
             return make_deferred_yieldable(ret)
 
